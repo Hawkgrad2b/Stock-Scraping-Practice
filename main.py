@@ -40,3 +40,23 @@ def extract_data(page_content):
     return main_price, additional_data
 
 
+def csv_save():
+    csv_file_path = 'stock_data.csv'
+    
+    current_date = datetime.now().strftime("%Y-%m-%d")
+    data = []
+    for symbol in stock_symbols:
+        page_content = get_page_results(symbol)
+        main_price, additional_data = extract_data(page_content)
+
+        stock_data = {
+            'Date': current_date,
+            'Symbol': symbol.upper(),
+            'Price': main_price
+        }
+        data.append(stock_data)
+    with open(csv_file_path, mode='w', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=csv_headers)
+        writer.writeheader()
+        for stock_data in data:
+            writer.writerow(stock_data)
