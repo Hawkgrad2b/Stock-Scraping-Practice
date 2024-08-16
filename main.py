@@ -5,18 +5,6 @@ import requests
 import csv
 from datetime import datetime
 
-SCRAPERAPI_URL = 'http://api.scraperapi.com'
-SCRAPERAPI_KEY = '83fa2fd89b26ee07095793f138511cf0'
-
-stock_symbols = ['aapl', 'ssnlf', 'tsla']
- 
-csv_headers = [
-    'Date', 'Symbol', 'Price', 'Open', 'Day Range', '52 Week Range', 'Market Cap',
-    'Shares Outstanding', 'Public Float', 'Beta', 'Rev. per Employee', 'P/E Ratio',
-    'EPS', 'Yield', 'Dividend', 'Ex-Dividend Date', 'Short Interest', '% of Float Shorted',
-    'Average Volume'
-]
-
 
 def get_page_results(stock_symbol):
     url = f'https://www.marketwatch.com/investing/stock/{stock_symbol}?mod=search_symbol'
@@ -60,3 +48,18 @@ def csv_save():
         writer.writeheader()
         for stock_data in data:
             writer.writerow(stock_data)
+
+def main():
+    
+    SCRAPERAPI_URL = 'http://api.scraperapi.com'
+    SCRAPERAPI_KEY = '83fa2fd89b26ee07095793f138511cf0'
+
+    stock_symbols = ['aapl', 'ssnlf', 'tsla']
+    csv_headers = ['Date', 'Symbol', 'Price', 'Open', 'Day Range', '52 Week Range', 'Market Cap',
+        'Shares Outstanding', 'Public Float', 'Beta', 'Rev. per Employee', 'P/E Ratio',
+        'EPS', 'Yield', 'Dividend', 'Ex-Dividend Date', 'Short Interest', '% of Float Shorted',
+        'Average Volume']
+    
+    csv.save()
+
+main()
