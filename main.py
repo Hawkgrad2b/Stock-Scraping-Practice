@@ -6,7 +6,7 @@ import csv
 from datetime import datetime
 
 
-def get_page_results(stock_symbol):
+def get_page_results(stock_symbol, SCRAPERAPI_KEY, SCRAPERAPI_URL):
     url = f'https://www.marketwatch.com/investing/stock/{stock_symbol}?mod=search_symbol'
     params = {
         'api_key' : SCRAPERAPI_KEY,
@@ -28,13 +28,13 @@ def extract_data(page_content):
     return main_price, additional_data
 
 
-def csv_save():
+def csv_save(symbols, headers, key, url):
     csv_file_path = 'stock_data.csv'
     
     current_date = datetime.now().strftime("%Y-%m-%d")
     data = []
-    for symbol in stock_symbols:
-        page_content = get_page_results(symbol)
+    for symbol in symbols:
+        page_content = get_page_results(symbol, key, url)
         main_price, additional_data = extract_data(page_content)
 
         stock_data = {
@@ -42,9 +42,11 @@ def csv_save():
             'Symbol': symbol.upper(),
             'Price': main_price
         }
+        stock_data.update(additional_data)
         data.append(stock_data)
+        
     with open(csv_file_path, mode='w', newline='') as file:
-        writer = csv.DictWriter(file, fieldnames=csv_headers)
+        writer = csv.DictWriter(file, fieldnames=headers)
         writer.writeheader()
         for stock_data in data:
             writer.writerow(stock_data)
@@ -60,6 +62,6 @@ def main():
         'EPS', 'Yield', 'Dividend', 'Ex-Dividend Date', 'Short Interest', '% of Float Shorted',
         'Average Volume']
     
-    csv.save()
+    csv_save(stock_symbols, csv_headers, SCRAPERAPI_KEY, SCRAPERAPI_URL)
 
 main()
